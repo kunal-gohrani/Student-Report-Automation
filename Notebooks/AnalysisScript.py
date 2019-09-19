@@ -16,7 +16,7 @@ import SupportFunctions
 
 class Analysis:
     def __init__(self):
-        #self.fileDownloader()
+        self.fileDownloader()
         self.data=self.data_importer()
         self.data=AnalysisDataCleaner.data_cleaner(self.data)
         self.months=['January','February','March','April','May',                     'June','July','August','September','October',                     'November','December']
