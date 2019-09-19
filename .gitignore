@@ -4,4 +4,6 @@ Drive/__pycache__
 *.pickle
 client_secret.json
 __pycache__
-
+*.pdf
+*.xlsx
+*.log
