@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[12]:
+# In[1]:
 
 
 import numpy as np
@@ -11,7 +11,7 @@ import AnalysisDataCleaner
 import SupportFunctions
 
 
-# In[13]:
+# In[2]:
 
 
 class Analysis:
@@ -61,8 +61,8 @@ class Analysis:
             total_marks['Task Marks']=total_marks['Student'].apply(SupportFunctions.get_task,args=[data])
             total_marks['MyDay Marks']=total_marks['Student'].apply(SupportFunctions.get_myday,args=[data])
             total_marks['Knowledge Sharing Marks']=total_marks['Student'].apply(SupportFunctions.get_gyan,args=[data])
-            total_marks['Number of Late Submissions']=total_marks['Student'].apply(SupportFunctions.get_count_late_submission,args=[data])
-            total_marks['Number of Tasks Won']=total_marks['Student'].apply(SupportFunctions.get_count_task_won,args=[data])
+            total_marks['Late Submissions']=total_marks['Student'].apply(SupportFunctions.get_count_late_submission,args=[data])
+            total_marks['Tasks Won']=total_marks['Student'].apply(SupportFunctions.get_count_task_won,args=[data])
             return tuple((total_marks,total_marks.style.hide_index()))
         
         elif month_name in self.months:
@@ -73,8 +73,8 @@ class Analysis:
             total_marks['Task Marks']=total_marks['Student'].apply(SupportFunctions.get_task,args=[temp,month_name])
             total_marks['MyDay Marks']=total_marks['Student'].apply(SupportFunctions.get_myday,args=[temp,month_name])
             total_marks['Knowledge Sharing Marks']=total_marks['Student'].apply(SupportFunctions.get_gyan,args=[temp,month_name])
-            total_marks['Number of Late Submissions']=total_marks['Student'].apply(SupportFunctions.get_count_late_submission,args=[temp,month_name])
-            total_marks['Number of Tasks Won']=total_marks['Student'].apply(SupportFunctions.get_count_task_won,args=[temp,month_name])
+            total_marks['Late Submissions']=total_marks['Student'].apply(SupportFunctions.get_count_late_submission,args=[temp,month_name])
+            total_marks['Tasks Won']=total_marks['Student'].apply(SupportFunctions.get_count_task_won,args=[temp,month_name])
             return tuple((total_marks,total_marks.style.hide_index()))
         
         else:
@@ -166,64 +166,56 @@ class Analysis:
             knowledge_count.rename(columns={'Points':'Number of days'},inplace=True)
             knowledge_data=knowledge_marks.merge(knowledge_count,on='Student')
             return tuple((knowledge_data,knowledge_data.style.hide_index()))
+    
+    def get_rank(self,name=None,month_name=None):
+        """Get the rank of the student, either from the global leaderboard, or from a months leaderboard (if month name
+        given)
+        :name - name of the student
+        :month_name - [Default:None] enter a month to run the function on.
 
+        Returns:
+        rank of the student in string format"""
+        data=self.data
+        
+        if name==None:
+            raise ValueError('Input a name')
 
-# In[14]:
-
-
-a=Analysis()
-
-
-# In[15]:
-
-
-a.total_marks_leaderboard()[0]
-
-
-# In[16]:
-
-
-a.total_marks_leaderboard(month_name='September')[0]
-
-
-# In[17]:
-
-
-a.student_task_marks('Kunal')[0]
-
-
-# In[18]:
-
-
-a.student_task_marks('Kunal','September')[0]
-
-
-# In[19]:
-
-
-a.student_myday('Kunal')[0]
-
-
-# In[20]:
-
-
-a.student_myday('Kunal',month_name='September')[0]
-
-
-# In[21]:
-
-
-a.student_knowledge_marks('Kunal')[0]
-
-
-# In[22]:
-
-
-a.student_knowledge_marks('Kunal',month_name='August')[0]
-
-
-# In[ ]:
-
-
+        if month_name==None:
+            leaderboard=self.total_marks_leaderboard()[0]
+            leaderboard=leaderboard[leaderboard['Student']==name].index
+            if len(leaderboard)>0:
+                return str(leaderboard[0]+1) #index starts from zero, so index+1 is rank
+            else:
+                raise Exception('Name wrong.')
+        elif month_name in self.months:
+            leaderboard=self.total_marks_leaderboard(month_name=month_name)[0]
+            leaderboard=leaderboard[leaderboard['Student']==name].index
+            if len(leaderboard)>0:
+                return str(leaderboard[0]+1) #index starts from zero, so index+1 is rank
+            else:
+                raise Exception('Wrong name.')
+        else:
+            raise Exception('Please check spelling of month and try again')
+            
+    def get_total_marks(self,name=None,month_name=None):
+        data=self.data
+        if name==None:
+            raise ValueError('input name')
+        if month_name==None:
+            leaderboard=self.total_marks_leaderboard()[0]
+            leaderboard=leaderboard[leaderboard['Student']==name]['Points'].values
+            if len(leaderboard)>0:
+                return str(leaderboard[0]) # returning total marks of the student as string
+            else:
+                raise Exception('Name wrong.')
+        elif month_name in self.months:
+            leaderboard=self.total_marks_leaderboard(month_name=month_name)[0]
+            leaderboard=leaderboard[leaderboard['Student']==name]['Points'].values
+            if len(leaderboard)>0:
+                return str(leaderboard[0]) # returning total marks of the student as string
+            else:
+                raise Exception('Wrong name.')
+        else:
+            raise Exception('Please check spelling of month and try again')
 
 
