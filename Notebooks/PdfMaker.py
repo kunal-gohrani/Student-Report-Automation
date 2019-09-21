@@ -7,7 +7,7 @@
 #!pip install reportlab
 
 
-# In[8]:
+# In[2]:
 
 
 from reportlab.platypus import SimpleDocTemplate, Paragraph,Spacer, Table, PageBreak,LongTable,TableStyle
@@ -22,7 +22,7 @@ import AnalysisScript,SupportFunctions
 import os
 
 
-# In[9]:
+# In[3]:
 
 
 class PdfMaker:
@@ -40,8 +40,9 @@ class PdfMaker:
         row_list=np.append(row_list,dataframe.columns.tolist()).reshape(1,8)
         data=np.array(dataframe).astype('str')
         #print(data)
-        for i in np.nditer(data,flags = ['external_loop'], order = 'C'):
-            row_list=np.append(row_list,[i],axis=0)
+        if len(data)>0:
+            for i in np.nditer(data,flags = ['external_loop'], order = 'C'):
+                row_list=np.append(row_list,[i],axis=0)
         return row_list.tolist()
     
     def generate_report_monthly(self,month,name):

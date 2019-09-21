@@ -192,8 +192,8 @@ class Analysis:
             leaderboard=leaderboard[leaderboard['Student']==name].index
             if len(leaderboard)>0:
                 return str(leaderboard[0]+1) #index starts from zero, so index+1 is rank
-            else:
-                raise Exception('Wrong name.')
+            #else:
+                #raise Exception('Wrong name.')
         else:
             raise Exception('Please check spelling of month and try again')
             
@@ -213,8 +213,8 @@ class Analysis:
             leaderboard=leaderboard[leaderboard['Student']==name]['Points'].values
             if len(leaderboard)>0:
                 return str(leaderboard[0]) # returning total marks of the student as string
-            else:
-                raise Exception('Wrong name.')
+            #else:
+            #    raise Exception('Wrong name.')
         else:
             raise Exception('Please check spelling of month and try again')
 

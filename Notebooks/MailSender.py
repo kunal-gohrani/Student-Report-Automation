@@ -13,6 +13,7 @@ from getpass import getpass
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
+import os
 class EmailSender:
     def __init__(self):
         self.username= "hellgod112@gmail.com"
@@ -20,6 +21,7 @@ class EmailSender:
         self.mail= smtplib.SMTP('smtp.gmail.com',587)
         self.mail.starttls()
         self.mail.login(self.username,self.password)
+        del self.password
     def send_mail(self,name,month,email):
        
         #mail.ehlo() # saying hello to your server that you wnt to use their service 
@@ -42,7 +44,8 @@ class EmailSender:
         #function to check how my current email look like 
         #print(msg.as_string())
         file_name=name+'_'+month+'.pdf'
-        with open(file_name , 'rb') as f:
+        path=os.path.join('pdfs',file_name)
+        with open(path , 'rb') as f:
             part=MIMEApplication(f.read())
             part.add_header('Content-Disposition', 'attachment', filename=file_name)
             msg.attach(part)
@@ -53,8 +56,9 @@ class EmailSender:
 # In[ ]:
 
 
-obj=EmailSender()
-obj.send_mail(name='Kunal',month='September',email='gohranikunal25@outlook.com')
+if __name__=='__main__':
+    obj=EmailSender()
+    obj.send_mail(name='Kunal',month='September',email='gohranikunal25@outlook.com')
 
 
 # In[ ]:
